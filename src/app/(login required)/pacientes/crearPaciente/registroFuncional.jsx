@@ -1,21 +1,9 @@
 'use client'
 import { useState } from "react";
-import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Button,
-  useDisclosure,
-} from "@nextui-org/react";
 import { createClient } from '@supabase/supabase-js';
+import { Button } from "@nextui-org/react";
 
 export default function Pruebas() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
-  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
-
   const supabaseUrl = 'https://xmrcozfqcoigbngikljv.supabase.co';
   const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhtcmNvemZxY29pZ2JuZ2lrbGp2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDA4ODMwMDIsImV4cCI6MjAxNjQ1OTAwMn0.gBc7Dg8EXh9WpDEDQsEjpEcCVZdlQZgy37wVsf5DS7Y'; // Reemplaza 'tu_clave' con tu clave real
   const supabase = createClient(supabaseUrl, supabaseKey);
@@ -38,12 +26,6 @@ export default function Pruebas() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validar que los campos requeridos estén llenos
-    if (!data.nombre || !data.apellido_paterno || !data.apellido_materno) {
-      setIsErrorModalOpen(true);
-      return;
-    }
-
     // Realiza el registro en la tabla de Supabase
     const { data: insertedData, error } = await supabase
       .from('pacientes')
@@ -51,21 +33,10 @@ export default function Pruebas() {
 
     if (error) {
       console.error('Error al insertar datos:', error.message);
-      setIsErrorModalOpen(true);
     } else {
       console.log('Registro exitoso:', insertedData);
-      setIsSuccessModalOpen(true);
+      // Puedes realizar otras acciones después del registro exitoso
     }
-  };
-
-  const handleCloseSuccessModal = () => {
-    setIsSuccessModalOpen(false);
-    // Puedes realizar otras acciones después de cerrar el modal de éxito
-  };
-
-  const handleCloseErrorModal = () => {
-    setIsErrorModalOpen(false);
-    // Puedes realizar otras acciones después de cerrar el modal de error
   };
 
   return (
@@ -77,7 +48,7 @@ export default function Pruebas() {
           </h2>
 
           <form onSubmit={handleSubmit}>
-            
+            {/* Resto del formulario */}
             <div className="mb-4">
               <label className="block text-sm text-gray-600">Nombre*:</label>
               <input
@@ -148,34 +119,6 @@ export default function Pruebas() {
           </form>
         </div>
       </div>
-
-      {/* Modal de éxito */}
-      <Modal isOpen={isSuccessModalOpen} onClose={handleCloseSuccessModal}>
-        <ModalContent>
-          <ModalHeader className="text-center">
-            ¡Formulario enviado con éxito!
-          </ModalHeader>
-          <ModalFooter>
-            <Button color="primary" onClick={handleCloseSuccessModal}>
-              Cerrar
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-
-      {/* Modal de error */}
-      <Modal isOpen={isErrorModalOpen} onClose={handleCloseErrorModal}>
-        <ModalContent>
-          <ModalHeader className="text-center">
-            ¡Error al enviar el formulario!
-          </ModalHeader>
-          <ModalFooter>
-            <Button color="danger" onClick={handleCloseErrorModal}>
-              Cerrar
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
     </>
   );
 }
