@@ -1,31 +1,26 @@
 'use client'
-import { useState } from "react";
-import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Button,
-  useDisclosure,
-} from "@nextui-org/react";
-import { createClient } from '@supabase/supabase-js';
+import React, { useState } from "react";
+import { createClient } from "@supabase/supabase-js";
+import { Button } from "@nextui-org/react";
+import SuccessModal from "./SuccessModal";
+import ErrorModal from "./ErrorModal";
+import ConfirmationModal from "./ConfirmationModal";
 
 export default function Pruebas() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
 
-  const supabaseUrl = 'https://xmrcozfqcoigbngikljv.supabase.co';
-  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhtcmNvemZxY29pZ2JuZ2lrbGp2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDA4ODMwMDIsImV4cCI6MjAxNjQ1OTAwMn0.gBc7Dg8EXh9WpDEDQsEjpEcCVZdlQZgy37wVsf5DS7Y'; // Reemplaza 'tu_clave' con tu clave real
+  const supabaseUrl = "https://xmrcozfqcoigbngikljv.supabase.co";
+  const supabaseKey ='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhtcmNvemZxY29pZ2JuZ2lrbGp2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDA4ODMwMDIsImV4cCI6MjAxNjQ1OTAwMn0.gBc7Dg8EXh9WpDEDQsEjpEcCVZdlQZgy37wVsf5DS7Y';
   const supabase = createClient(supabaseUrl, supabaseKey);
 
   const [data, setData] = useState({
-    nombre: '',
-    apellido_paterno: '',
-    apellido_materno: '',
-    telefono: '',
-    email: '',
+    nombre: "",
+    apellido_paterno: "",
+    apellido_materno: "",
+    telefono: "",
+    email: "",
   });
 
   const handleChange = (e) => {
@@ -35,8 +30,14 @@ export default function Pruebas() {
     });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleConfirmation = () => {
+    // Abrir el modal de confirmación
+    setIsConfirmationModalOpen(true);
+  };
+
+  const handleConfirmSubmit = async () => {
+    // Cerrar el modal de confirmación
+    setIsConfirmationModalOpen(false);
 
     // Validar que los campos requeridos estén llenos
     if (!data.nombre || !data.apellido_paterno || !data.apellido_materno) {
@@ -46,14 +47,14 @@ export default function Pruebas() {
 
     // Realiza el registro en la tabla de Supabase
     const { data: insertedData, error } = await supabase
-      .from('pacientes')
+      .from("pacientes")
       .insert([data]);
 
     if (error) {
-      console.error('Error al insertar datos:', error.message);
+      console.error("Error al insertar datos:", error.message);
       setIsErrorModalOpen(true);
     } else {
-      console.log('Registro exitoso:', insertedData);
+      console.log("Registro exitoso:", insertedData);
       setIsSuccessModalOpen(true);
     }
   };
@@ -76,9 +77,10 @@ export default function Pruebas() {
             Crear Paciente
           </h2>
 
-          <form onSubmit={handleSubmit}>
-            
-            <div className="mb-4">
+          <form onSubmit={(e) => { e.preventDefault(); handleConfirmation(); }}>
+           
+           
+          <div className="mb-4">
               <label className="block text-sm text-gray-600">Nombre*:</label>
               <input
                 type="text"
@@ -139,43 +141,32 @@ export default function Pruebas() {
                 onChange={handleChange}
               />
             </div>
-
+            
             <div className="mt-auto text-center">
-              <Button type="submit">
-                Enviar
-              </Button>
+              <Button type="submit">Enviar</Button>
             </div>
           </form>
         </div>
       </div>
 
       {/* Modal de éxito */}
-      <Modal isOpen={isSuccessModalOpen} onClose={handleCloseSuccessModal}>
-        <ModalContent>
-          <ModalHeader className="text-center">
-            ¡Formulario enviado con éxito!
-          </ModalHeader>
-          <ModalFooter>
-            <Button color="primary" onClick={handleCloseSuccessModal}>
-              Cerrar
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      <SuccessModal
+        isOpen={isSuccessModalOpen}
+        onClose={handleCloseSuccessModal}
+      />
 
       {/* Modal de error */}
-      <Modal isOpen={isErrorModalOpen} onClose={handleCloseErrorModal}>
-        <ModalContent>
-          <ModalHeader className="text-center">
-            ¡Error al enviar el formulario!
-          </ModalHeader>
-          <ModalFooter>
-            <Button color="danger" onClick={handleCloseErrorModal}>
-              Cerrar
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      <ErrorModal
+        isOpen={isErrorModalOpen}
+        onClose={handleCloseErrorModal}
+      />
+
+      {/* Modal de confirmación */}
+      <ConfirmationModal
+        isOpen={isConfirmationModalOpen}
+        onClose={() => setIsConfirmationModalOpen(false)}
+        onConfirm={handleConfirmSubmit}
+      />
     </>
   );
 }
