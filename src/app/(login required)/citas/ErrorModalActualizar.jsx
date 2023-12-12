@@ -3,7 +3,7 @@ import { useState } from "react";
 
 const ErrorModalActualizar = ({ isOpen, onClose, errorMessage }) => {
   return (
-    <Modal isOpen={isOpen} onRequestClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose}>
       <ModalContent>
         <ModalHeader>Error</ModalHeader>
         <ModalBody>
