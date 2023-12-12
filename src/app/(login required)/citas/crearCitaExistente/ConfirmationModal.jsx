@@ -1,24 +1,24 @@
 import React from "react";
 import { Modal, ModalContent, ModalHeader, ModalFooter, Button } from "@nextui-org/react";
-import Link from "next/link";
 
-const SuccessModal = ({ isOpen, onClose }) => {
+const ConfirmationModal = ({ isOpen, onClose, onConfirm }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalContent>
         <ModalHeader className="text-center">
-          ¡Formulario enviado con éxito!
+          ¿Está seguro de crear una nueva cita?
         </ModalHeader>
         <ModalFooter>
-          <Link href="/pacientes">
-            <Button color="primary" onClick={onClose}>
-              Cerrar
-            </Button>
-          </Link>
+          <Button color="danger" variant="light" onClick={onClose}>
+            Cancelar
+          </Button>
+          <Button color="primary" onClick={onConfirm}>
+            Confirmar
+          </Button>
         </ModalFooter>
       </ModalContent>
     </Modal>
   );
 };
 
-export default SuccessModal;
+export default ConfirmationModal;

@@ -1,19 +1,17 @@
 'use client'
-import React, { useState } from "react";
-import { createClient } from "@supabase/supabase-js";
+import { useState } from "react";
 import { Button } from "@nextui-org/react";
 import SuccessModal from "./SuccessModal";
 import ErrorModal from "./ErrorModal";
 import ConfirmationModal from "./ConfirmationModal";
+import { supabase } from "../../Supabase"
 
 export default function Pruebas() {
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
 
-  const supabaseUrl = "https://xmrcozfqcoigbngikljv.supabase.co";
-  const supabaseKey ='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhtcmNvemZxY29pZ2JuZ2lrbGp2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDA4ODMwMDIsImV4cCI6MjAxNjQ1OTAwMn0.gBc7Dg8EXh9WpDEDQsEjpEcCVZdlQZgy37wVsf5DS7Y';
-  const supabase = createClient(supabaseUrl, supabaseKey);
+  
 
   const [data, setData] = useState({
     nombre: "",
@@ -41,7 +39,9 @@ export default function Pruebas() {
 
     // Validar que los campos requeridos estén llenos
     if (!data.nombre || !data.apellido_paterno || !data.apellido_materno) {
+      console.error("Error al insertar datos: campos requeridos vacíos");
       setIsErrorModalOpen(true);
+      
       return;
     }
 
@@ -52,7 +52,9 @@ export default function Pruebas() {
 
     if (error) {
       console.error("Error al insertar datos:", error.message);
+      console.log("Registro fallido:", data);
       setIsErrorModalOpen(true);
+      
     } else {
       console.log("Registro exitoso:", insertedData);
       setIsSuccessModalOpen(true);
@@ -123,7 +125,7 @@ export default function Pruebas() {
             <div className="mb-4">
               <label className="block text-sm text-gray-600">Telefono:</label>
               <input
-                type="text"
+                type="number"
                 className="w-full border border-black rounded-md px-3 py-2"
                 placeholder="ejem. 921 118 7752"
                 name="telefono"
@@ -134,7 +136,7 @@ export default function Pruebas() {
             <div className="mb-4">
               <label className="block text-sm text-gray-600">Email:</label>
               <input
-                type="text"
+                type="email"
                 className="w-full border border-black rounded-md px-3 py-2"
                 placeholder="ejemplo@gmail.com"
                 name="email"

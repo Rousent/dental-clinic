@@ -10,7 +10,7 @@ const SuccessModal = ({ isOpen, onClose }) => {
           ¡Formulario enviado con éxito!
         </ModalHeader>
         <ModalFooter>
-          <Link href="/pacientes">
+          <Link href="/citas">
             <Button color="primary" onClick={onClose}>
               Cerrar
             </Button>

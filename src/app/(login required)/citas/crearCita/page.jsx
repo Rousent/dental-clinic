@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function crearCita() {
   return (
     <>
@@ -8,16 +10,16 @@ export default function crearCita() {
           </h2>
 
           <div className="mt-auto flex text-center mt-3 mb-3">
-            <a href="/citas/crearCita">
+            <Link href="/citas/crearCita">
               <button className="px-4 py-2 rounded-tl-md rounded-bl-md border border-gray-300 focus:outline-none hover:bg-gray-100">
                 Nuevo paciente
               </button>
-            </a>
-            <a href="/citas/crearCitaExistente">
+            </Link>
+            <Link href="/citas/crearCitaExistente">
               <button className="px-4 py-2 rounded-tr-md rounded-br-md border border-l-0 border-gray-300 focus:outline-none hover:bg-gray-100">
                 Paciente existente
               </button>
-            </a>
+            </Link>
           </div>
 
           <form action="{% url 'crearCita' %}" method="POST">
@@ -93,7 +95,7 @@ export default function crearCita() {
                 name="especialista"
                 required
               >
-                <option value="" disabled selected>
+                <option value="" disabled>
                   Seleccione al especialista
                 </option>
                 <option value="1">1</option>
