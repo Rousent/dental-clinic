@@ -1,33 +1,64 @@
 'use client'
 import Link from "next/link";
 import { ObtenerDatosCita } from "./ObtenerDatosCita";
+import { ObtenerDatosPacienteAll } from "../pacientes/ObtenerDatosPacienteAll"; 
 import { useEffect, useState } from 'react';
 import { actualizarDatos } from "./actualizarDatos";
 import eliminarCita from "./eliminarCita";
 import { Modal, ModalContent, ModalHeader, ModalFooter, Button, ModalBody } from "@nextui-org/react";
 import {Table, TableHeader, TableColumn, TableBody, TableRow, TableCell} from "@nextui-org/react";
+import ErrorModalActualizar from "./ErrorModalActualizar";
 
 export default function Citas() {
 
+  const [errorModalIsOpen, setErrorModalIsOpen] = useState(false);
+const [errorMessage, setErrorMessage] = useState('');
+
+const handleCloseErrorModal = () => {
+  setErrorModalIsOpen(false);
+};
+
   const [datos, setDatos] = useState([]);
+  const [pacientes, setPacientes] = useState([]);
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
     const [nuevosDatos, setNuevosDatos] = useState({ fecha: '', hora_inicio: '', hora_termino: '', procedimiento: '', costo: '', paciente: '' });
   
     useEffect(() => {
       async function cargarDatos() {
-        const datos = await ObtenerDatosCita();
-        if (datos) {
-          setDatos(datos);
+        const citas = await ObtenerDatosCita();
+        const pacientes = await ObtenerDatosPacienteAll();
+  
+        if (citas && pacientes) {
+          // Iterar sobre las citas y encontrar los datos del paciente correspondiente
+          const datosCombinados = citas.map((cita) => {
+            const pacienteData = pacientes.find((paciente) => paciente.id === cita.paciente);
+            return {
+              id: cita.id,
+              fecha: cita.fecha,
+              hora_inicio: cita.hora_inicio,
+              hora_termino: cita.hora_termino,
+              procedimiento: cita.procedimiento,
+              costo: cita.costo,
+              paciente: pacienteData,
+            };
+          });
+  
+          setDatos(datosCombinados);
+          setPacientes(pacientes);
         }
       }
   
       cargarDatos();
     }, []);
+
+    
+  
+      
   
     const handleAbrirModal = (item) => {
       setSelectedItem(item);
-      setNuevosDatos({ fecha: item.fecha, hora_inicio: item.hora_inicio, hora_termino: item.hora_termino, procedimiento: item.procedimiento, costo: item.costo, paciente: item.paciente }); // Inicializar el formulario con los datos actuales
+      setNuevosDatos({ fecha: item.fecha, hora_inicio: item.hora_inicio, hora_termino: item.hora_termino, procedimiento: item.procedimiento, costo: item.costo, paciente: item.paciente.id }); // Inicializar el formulario con los datos actuales
       setModalIsOpen(true);
     };
   
@@ -35,14 +66,19 @@ export default function Citas() {
       setModalIsOpen(false);
     };
   
-    const onClose = () => setModalIsOpen(false);
   
     const handleActualizar = async () => {
-      const { id } = selectedItem;
-      const updatedData = await actualizarDatos(id, nuevosDatos);
-      console.log('Datos actualizados con éxito:', updatedData);
-      setModalIsOpen(false); // Cerrar el modal después de la actualización
-      window.location.reload(); // Recargar la página
+      try {
+        const { id } = selectedItem;
+        const updatedData = await actualizarDatos(id, nuevosDatos);
+        console.log('Datos actualizados con éxito:', updatedData);
+        window.location.reload(); // Recargar la página después de la eliminación
+        setModalIsOpen(false); // Cerrar el modal después de la actualización
+      } catch (error) {
+        console.error('Error al actualizar datos:', error.message);
+        setErrorMessage('Error al actualizar datos. Por favor, inténtalo de nuevo.');
+        setErrorModalIsOpen(true);
+      }
     };
 
     const handleEliminar = async (citaId) => {
@@ -70,12 +106,13 @@ export default function Citas() {
           </button>
         </Link>
       </div>
+      
 
       <Table aria-label="Example static collection table">
         <TableHeader>
-          <TableColumn>ID</TableColumn>
-          <TableColumn>Paciente</TableColumn>
-          <TableColumn>Fecha</TableColumn>
+          <TableColumn>ID cita</TableColumn>
+          <TableColumn>Nombre del paciente</TableColumn>
+          <TableColumn>Fecha de la cita</TableColumn>
           <TableColumn>Hora de inicio</TableColumn>
           <TableColumn>Hora de termino</TableColumn>
           <TableColumn>Procedimiento</TableColumn>
@@ -87,7 +124,7 @@ export default function Citas() {
           {datos.map((item) => (
             <TableRow key={item.id}>
               <TableCell>{item.id}</TableCell>
-              <TableCell>{item.paciente}</TableCell>
+              <TableCell>{item.paciente.nombre} {item.paciente.apellido_paterno} {item.paciente.apellido_materno}</TableCell>
               <TableCell>{item.fecha}</TableCell>
               <TableCell>{item.hora_inicio}</TableCell>
               <TableCell>{item.hora_termino}</TableCell>
@@ -105,21 +142,27 @@ export default function Citas() {
       </Table>
   
         {/* Modal de actualización */}
-        <Modal isOpen={modalIsOpen} onRequestClose={handleCerrarModal} onClose={onClose}>
+        <Modal isOpen={modalIsOpen} onClose={handleCerrarModal}>
           <ModalContent>
             <ModalHeader className="text-center">
               Actualizar Datos
             </ModalHeader>
             <form>
               <ModalBody>
-                <label>
-                  Paciente:
-                  <input
-                    type="text"
-                    value={nuevosDatos.paciente}
-                    onChange={(e) => setNuevosDatos({ ...nuevosDatos, paciente: e.target.value })}
-                  />
-                </label>
+              <label>
+              Paciente:
+              <select
+                value={parseInt(nuevosDatos.paciente, 10)}
+                onChange={(e) => setNuevosDatos({ ...nuevosDatos, paciente: parseInt(e.target.value, 10) })}
+              >
+                <option value="">Seleccionar Paciente</option>
+                {pacientes.map((paciente) => (
+                  <option key={paciente.id} value={paciente.id}>
+                    {`${paciente.nombre} ${paciente.apellido_paterno} ${paciente.apellido_materno}`}
+                  </option>
+                ))}
+              </select>
+            </label>
                 <label>
                   Fecha:
                   <input
@@ -172,6 +215,9 @@ export default function Citas() {
             </form>
           </ModalContent>
         </Modal>
+
+        {/* Modal de error */}
+    <ErrorModalActualizar isOpen={errorModalIsOpen} onClose={handleCloseErrorModal} errorMessage={errorMessage} />
       
     </>
   );

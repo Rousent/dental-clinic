@@ -112,22 +112,22 @@ export default function Home() {
       />
 
         {/* Modal para mostrar los datos del paciente */}
-      <Modal isOpen={isModalOpen}  onClose={handleCloseModal}>
+      <Modal isOpen={isModalOpen}  onClose={handleCloseModal} className="text-lg">
         <ModalContent>
-          <ModalHeader>Detalles de la cita</ModalHeader>
+          <ModalHeader><b>Detalles de la cita</b></ModalHeader>
           <ModalBody>
             {selectedPatientData && (
               <>
-                <p>Nombre: {selectedPatientData.nombre}{" "}{selectedPatientData.apellido_paterno}{" "}{selectedPatientData.apellido_materno}</p>
-                <p>Telefono: {selectedPatientData.telefono}</p>
+                <p><b>Nombre: </b>{selectedPatientData.nombre}{" "}{selectedPatientData.apellido_paterno}{" "}{selectedPatientData.apellido_materno}</p>
+                <p><b>Telefono: </b> {selectedPatientData.telefono}</p>
                 {/* Agrega más detalles del paciente según tus necesidades */}
               </>
             )}
             {selectedCita && (
               <>
-                <p>Fecha de la cita (aa/mm/dd): {selectedCita.fecha}</p>
-                <p>Hora de inicio: {selectedCita.hora_inicio}</p>
-                <p>Hora de termino: {selectedCita.hora_termino}</p>
+                <p><b>Fecha (aa/mm/dd):</b> {selectedCita.fecha}</p>
+                <p><b>Hora de inicio: </b> {selectedCita.hora_inicio}</p>
+                <p><b>Hora de termino: </b>{selectedCita.hora_termino}</p>
                 {/* Agrega más detalles de la cita según tus necesidades */}
               </>
             )}
