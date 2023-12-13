@@ -5,29 +5,15 @@ import { ObtenerDatosPacienteAll } from "../pacientes/ObtenerDatosPacienteAll";
 import { useEffect, useState } from "react";
 import { actualizarDatos } from "./actualizarDatos";
 import eliminarCita from "./eliminarCita";
-import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  Button,
-  ModalBody,
-} from "@nextui-org/react";
-import {
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
-} from "@nextui-org/react";
+import { Button,} from "@nextui-org/react";
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell,} from "@nextui-org/react";
 import ErrorModalActualizar from "./ErrorModalActualizar";
 import ModalActualizar from "./ModalActualizar";
 
 //Inicio de la funcion Citas
 export default function Citas() {
 
-  
+  const [filtroNombre, setFiltroNombre] = useState("");
 
   const [errorModalIsOpen, setErrorModalIsOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -82,16 +68,21 @@ export default function Citas() {
   }, []);
 
   const handleAbrirModal = (item) => {
-    setSelectedItem(item);
-    setNuevosDatos({
-      fecha: item.fecha,
-      hora_inicio: item.hora_inicio,
-      hora_termino: item.hora_termino,
-      procedimiento: item.procedimiento,
-      costo: item.costo,
-      paciente: item.paciente.id,
-    }); // Inicializar el formulario con los datos actuales
-    setModalIsOpen(true);
+    // Agrega lógica para verificar si el nombre del paciente cumple con el filtro
+    const nombreCompleto = `${item.paciente.nombre} ${item.paciente.apellido_paterno} ${item.paciente.apellido_materno}`;
+    
+    if (nombreCompleto.toLowerCase().includes(filtroNombre.toLowerCase())) {
+      setSelectedItem(item);
+      setNuevosDatos({
+        fecha: item.fecha,
+        hora_inicio: item.hora_inicio,
+        hora_termino: item.hora_termino,
+        procedimiento: item.procedimiento,
+        costo: item.costo,
+        paciente: item.paciente.id,
+      }); // Inicializar el formulario con los datos actuales
+      setModalIsOpen(true);
+    }
   };
 
   const handleCerrarModal = () => {
@@ -103,7 +94,7 @@ export default function Citas() {
       const { id } = selectedItem;
       const updatedData = await actualizarDatos(id, nuevosDatos);
       console.log("Datos actualizados con éxito:", updatedData);
-      window.location.reload(); // Recargar la página después de la eliminación
+      window.location.reload(); // Recargar la página
       setModalIsOpen(false); // Cerrar el modal después de la actualización
     } catch (error) {
       console.error("Error al actualizar datos:", error.message);
@@ -127,16 +118,29 @@ export default function Citas() {
 
   return (
     <>
-      <h1 className="flex items-center justify-center text-3xl font-bold mt-10 mb-5">
+      <h1 className="flex items-center justify-center text-3xl font-bold mt-5 mb-3">
         Lista de citas
       </h1>
-      <div className="mt-auto text-center mb-3">
+      <div className="mt-auto text-center mb-5">
         <Link href="citas/crearCitaExistente/">
-          <button className="bg-blue-500 text-white py-2 px-4 rounded-full">
+          <Button color="primary" >
             Crear Cita
-          </button>
+          </Button>
         </Link>
       </div>
+
+      <div className="mb-3">
+    <label className="block text-gray-700 text-sm font-bold mb-2">
+      Buscar por nombre del paciente:
+    </label>
+    <input
+      type="text"
+      value={filtroNombre}
+      onChange={(e) => setFiltroNombre(e.target.value)}
+      className="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+      placeholder="Nombre del paciente"
+    />
+  </div>
 
       <Table aria-label="Example static collection table">
         <TableHeader>
@@ -152,7 +156,12 @@ export default function Citas() {
           {/* Nueva columna para el botón de eliminar */}
         </TableHeader>
         <TableBody emptyContent={"No rows to display."}>
-          {datos.map((item) => (
+        {datos
+          .filter((item) => {
+            const nombreCompleto = `${item.paciente.nombre} ${item.paciente.apellido_paterno} ${item.paciente.apellido_materno}`;
+            return nombreCompleto.toLowerCase().includes(filtroNombre.toLowerCase());
+          })
+          .map((item) => (
             <TableRow key={item.id}>
               <TableCell>{item.id}</TableCell>
               <TableCell>

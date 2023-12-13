@@ -10,7 +10,8 @@ import {Table, TableHeader, TableColumn, TableBody, TableRow, TableCell} from "@
 
 export default function Pacientes() {
 
-  
+    const [filtroNombre, setFiltroNombre] = useState("");
+
     const [datos, setDatos] = useState([]);
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
@@ -23,14 +24,17 @@ export default function Pacientes() {
           setDatos(datos);
         }
       }
-  
       cargarDatos();
     }, []);
   
     const handleAbrirModal = (item) => {
-      setSelectedItem(item);
-      setNuevosDatos({ telefono: item.telefono, email: item.email }); // Inicializar el formulario con los datos actuales
-      setModalIsOpen(true);
+      const nombreCompleto = `${item.nombre} ${item.apellido_paterno} ${item.apellido_materno}`;
+
+      if (nombreCompleto.toLowerCase().includes(filtroNombre.toLowerCase())) {
+        setSelectedItem(item);
+        setNuevosDatos({ telefono: item.telefono, email: item.email }); // Inicializar el formulario con los datos actuales
+        setModalIsOpen(true);
+      }
     };
   
     const handleCerrarModal = () => {
@@ -68,24 +72,42 @@ export default function Pacientes() {
           </Button>
         </Link>
       </div>
+
+      <div className="mb-3">
+    <label className="block text-gray-700 text-sm font-bold mb-2">
+      Buscar por nombre del paciente:
+    </label>
+    <input
+      type="text"
+      value={filtroNombre}
+      onChange={(e) => setFiltroNombre(e.target.value)}
+      className="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+      placeholder="Nombre del paciente"
+    />
+  </div>
+
       <Table aria-label="Example static collection table">
         <TableHeader>
           <TableColumn>ID</TableColumn>
-          <TableColumn>Nombre(s)</TableColumn>
-          <TableColumn>Apellido paterno</TableColumn>
-          <TableColumn>Apellido materno</TableColumn>
+          <TableColumn>Nombre del paciente</TableColumn>
           <TableColumn>Telefono</TableColumn>
           <TableColumn>Email</TableColumn>
           <TableColumn>Actualizar datos</TableColumn>
           <TableColumn>Eliminar</TableColumn> {/* Nueva columna para el botón de eliminar */}
         </TableHeader>
         <TableBody emptyContent={"No rows to display."}>
-          {datos.map((item) => (
+          {datos
+          .filter((item) => {
+            const nombreCompleto = `${item.nombre} ${item.apellido_paterno} ${item.apellido_materno}`;
+            return nombreCompleto.toLowerCase().includes(filtroNombre.toLowerCase());
+          })
+          .map((item) => (
             <TableRow key={item.id}>
               <TableCell>{item.id}</TableCell>
-              <TableCell>{item.nombre}</TableCell>
-              <TableCell>{item.apellido_paterno}</TableCell>
-              <TableCell>{item.apellido_materno}</TableCell>
+              <TableCell>
+              {item.nombre} {item.apellido_paterno}{" "}
+              {item.apellido_materno}
+              </TableCell>
               <TableCell>{item.telefono}</TableCell>
               <TableCell>{item.email}</TableCell>
               <TableCell>
