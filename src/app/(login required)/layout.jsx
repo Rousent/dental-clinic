@@ -11,9 +11,16 @@ export default async function NavigationLayout({ children }) {
 
 	if (!session) redirect("/login");
 
+	const { data } = await supabase
+		.from("perfiles")
+		.select("*")
+		.eq("id", session.user.id);
+
+	const userIsAdmin = data[0]["rol"] === 1;
+
 	return (
 		<>
-			<Navigation />
+			<Navigation userIsAdmin={userIsAdmin} />
 			<div className="max-w-[1024px] mx-auto px-10">{children}</div>
 		</>
 	);

@@ -18,9 +18,8 @@ import {
 import Link from "next/link";
 import { useState } from "react";
 
-export default function Navigation() {
+export default function Navigation({ userIsAdmin }) {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
-	const admin = true;
 
 	const links = [
 		["Citas", "/citas", <IconCalendarUser className="mr-2" />],
@@ -46,7 +45,7 @@ export default function Navigation() {
 
 			<NavbarContent className="hidden md:flex gap-10" justify="center">
 				{links.map((item) => {
-					if (item[0] === "Admin" && !admin) {
+					if (item[0] === "Admin" && !userIsAdmin) {
 						return null;
 					} else {
 						return (
@@ -66,7 +65,7 @@ export default function Navigation() {
 
 			<NavbarMenu>
 				{links.map((item) => {
-					if (item[0] === "Admin" && !admin) {
+					if (item[0] === "Admin" && !userIsAdmin) {
 						return null;
 					} else {
 						return (
