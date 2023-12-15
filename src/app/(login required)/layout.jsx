@@ -16,6 +16,8 @@ export default async function NavigationLayout({ children }) {
 		.select("*")
 		.eq("id", session.user.id);
 
+	if (data[0]["estado"] !== "ALTA") redirect("/login");
+
 	const userIsAdmin = data[0]["rol"] === 1;
 
 	return (
