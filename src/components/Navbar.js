@@ -1,4 +1,4 @@
-import { IconCalendarUser, IconAddressBook, IconTool, IconUserCircle, IconDoorExit } from "@tabler/icons-react";
+import { IconCalendarUser, IconAddressBook, IconTool, IconUserCircle, IconDoorExit, IconHome } from "@tabler/icons-react";
 import { Navbar,  NavbarBrand,  NavbarContent,  NavbarItem,  NavbarMenuToggle, NavbarMenu, NavbarMenuItem } from "@nextui-org/navbar";
 import Link from "next/link";
 import { useState } from "react";
@@ -8,6 +8,7 @@ export default function Navigation() {
     const admin = true
 
     const links = [
+        ["Home", "/", (<IconHome className="mr-2" />)],
         ["Citas", "/citas", (<IconCalendarUser className="mr-2" />)],
         ["Pacientes", "/pacientes", (<IconAddressBook className="mr-2" />)],
         ["Admin", "/admin", (<IconTool className="mr-2" />)],
