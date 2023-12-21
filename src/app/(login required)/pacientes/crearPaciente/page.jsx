@@ -5,6 +5,7 @@ import SuccessModal from "./SuccessModal";
 import ErrorModal from "./ErrorModal";
 import ConfirmationModal from "./ConfirmationModal";
 import { supabase } from "../../Supabase"
+import Link from "next/link";
 
 export default function Pruebas() {
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
@@ -74,10 +75,21 @@ export default function Pruebas() {
   return (
     <>
       <div className="flex items-center justify-center">
-        <div className="bg-white shadow-md rounded-md p-6 w-80 mt-7 mb-7">
+        <div className="bg-white shadow-md rounded-md p-6 w-96 mt-7 mb-7">
           <h2 className="text-center text-xl font-semibold mb-4">
             Crear Paciente
           </h2>
+
+          {/* Pestañas */}
+          <div className="flex justify-center items-center">
+            <div className="mt-auto mt-3 mb-3">
+              <Link href="/citas/crearCitaExistente">
+                <button className="px-4 py-2 rounded-md border border-gray-600 focus:outline-none hover:bg-gray-100">
+                  Nueva cita
+                </button>
+              </Link>
+            </div>
+          </div>
 
           <form onSubmit={(e) => { e.preventDefault(); handleConfirmation(); }}>
            
@@ -145,7 +157,7 @@ export default function Pruebas() {
             </div>
             
             <div className="mt-auto text-center">
-              <Button type="submit">Enviar</Button>
+              <Button type="submit" color="primary">Enviar</Button>
             </div>
           </form>
         </div>
