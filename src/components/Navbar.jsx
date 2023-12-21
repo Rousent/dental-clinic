@@ -6,6 +6,7 @@ import {
 	IconTool,
 	IconUserCircle,
 	IconDoorExit,
+	IconHome
 } from "@tabler/icons-react";
 import {
 	Navbar,
@@ -22,6 +23,7 @@ export default function Navigation({ userIsAdmin }) {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 
 	const links = [
+		["Home", "/", <IconHome className="mr-2" />],
 		["Citas", "/citas", <IconCalendarUser className="mr-2" />],
 		["Pacientes", "/pacientes", <IconAddressBook className="mr-2" />],
 		["Admin", "/admin", <IconTool className="mr-2" />],

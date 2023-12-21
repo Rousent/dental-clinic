@@ -1,7 +1,7 @@
 'use client'
 import Link from "next/link";
 import { ObtenerDatosPacienteAll } from "../../pacientes/ObtenerDatosPacienteAll";
-import { ObtenerDatosEspecialista } from "./ObtenerDatosEspecialista";
+import { ObtenerDatosEspecialistaAll } from "./ObtenerDatosEspecialistaAll";
 import { useEffect, useState } from 'react';
 import { Button } from "@nextui-org/react";
 import SuccessModal from "./SuccessModal";
@@ -29,7 +29,7 @@ export default function crearCitaExistente() {
 
   useEffect(() => {
       async function cargarDatos() {
-        const datosEspecialista = await ObtenerDatosEspecialista();
+        const datosEspecialista = await ObtenerDatosEspecialistaAll();
         if (datosEspecialista) {
           setDatosEspecialista(datosEspecialista);
         }
@@ -50,6 +50,7 @@ export default function crearCitaExistente() {
       hora_termino: "",
       procedimiento: "",
       costo: "",
+      especialista:"",
       paciente: "",
     });
 
@@ -70,14 +71,14 @@ export default function crearCitaExistente() {
       setIsConfirmationModalOpen(false);
   
       // Validar que los campos requeridos estén llenos
-      if (!data.fecha || !data.hora_inicio || !data.hora_termino || !data.procedimiento || !data.costo || !data.paciente) {
+      if (!data.fecha || !data.hora_inicio || !data.hora_termino || !data.procedimiento || !data.costo || !data.especialista || !data.paciente) {
         setIsErrorModalOpen(true);
         return;
       }
   
       // Realiza el registro en la tabla de Supabase
       const { data: insertedData, error } = await supabase
-        .from("citas_duplicate")
+        .from("citas")
         .insert([data]);
   
       if (error) {
@@ -157,7 +158,7 @@ export default function crearCitaExistente() {
               <div className="border-b-2 border-black mt-2"></div>
             </div>
 
-            {/* <div className="mb-4">
+            <div className="mb-4">
               <label className="block text-sm text-gray-600">
                 Seleccione un especialista*:
               </label>
@@ -179,7 +180,7 @@ export default function crearCitaExistente() {
                   </option>
                ))}
               </select>
-            </div>   */}
+            </div>  
 
             <div className="mb-4">
               <label className="block text-sm text-gray-600">Fecha*:</label>

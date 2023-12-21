@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { ObtenerDatosCita } from "./ObtenerDatosCita";
 import { ObtenerDatosPacienteAll } from "../pacientes/ObtenerDatosPacienteAll";
+import { ObtenerDatosEspecialistaAll } from "./crearCitaExistente/ObtenerDatosEspecialistaAll";
 import { useEffect, useState } from "react";
 import { actualizarDatos } from "./actualizarDatos";
 import eliminarCita from "./eliminarCita";
@@ -24,6 +25,7 @@ export default function Citas() {
 
   const [datos, setDatos] = useState([]);
   const [pacientes, setPacientes] = useState([]);
+  const [especialistas, setEspecialistas] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
 
@@ -34,6 +36,7 @@ export default function Citas() {
     hora_termino: "",
     procedimiento: "",
     costo: "",
+    especialista: "",
     paciente: "",
   });
 
@@ -41,12 +44,16 @@ export default function Citas() {
     async function cargarDatos() {
       const citas = await ObtenerDatosCita();
       const pacientes = await ObtenerDatosPacienteAll();
+      const especialistas = await ObtenerDatosEspecialistaAll();
 
-      if (citas && pacientes) {
-        // Iterar sobre las citas y encontrar los datos del paciente correspondiente
+      if (citas && pacientes && especialistas) {
+        // Iterar sobre las citas y encontrar los datos del paciente y del especialista
         const datosCombinados = citas.map((cita) => {
           const pacienteData = pacientes.find(
             (paciente) => paciente.id === cita.paciente
+          );
+          const especialistaData = especialistas.find(
+            (especialista) => especialista.id === cita.especialista
           );
           return {
             id: cita.id,
@@ -55,12 +62,14 @@ export default function Citas() {
             hora_termino: cita.hora_termino,
             procedimiento: cita.procedimiento,
             costo: cita.costo,
+            especialista: especialistaData,
             paciente: pacienteData,
           };
         });
 
         setDatos(datosCombinados);
         setPacientes(pacientes);
+        setEspecialistas(especialistas);
       }
     }
 
@@ -79,6 +88,7 @@ export default function Citas() {
         hora_termino: item.hora_termino,
         procedimiento: item.procedimiento,
         costo: item.costo,
+        especialista: item.especialista.id,
         paciente: item.paciente.id,
       }); // Inicializar el formulario con los datos actuales
       setModalIsOpen(true);
@@ -149,6 +159,7 @@ export default function Citas() {
           <TableColumn>Fecha de la cita</TableColumn>
           <TableColumn>Hora de inicio</TableColumn>
           <TableColumn>Hora de termino</TableColumn>
+          <TableColumn>Especialista</TableColumn>
           <TableColumn>Procedimiento</TableColumn>
           <TableColumn>Costo</TableColumn>
           <TableColumn>Actualizar</TableColumn>
@@ -159,7 +170,8 @@ export default function Citas() {
         {datos
           .filter((item) => {
             const nombreCompleto = `${item.paciente.nombre} ${item.paciente.apellido_paterno} ${item.paciente.apellido_materno}`;
-            return nombreCompleto.toLowerCase().includes(filtroNombre.toLowerCase());
+            /* const nombreCompletoEspecialista = `${item.especialista.nombre} ${item.especialista.apellido_paterno} ${item.especialista.apellido_materno}`; */
+            return nombreCompleto.toLowerCase().includes(filtroNombre.toLowerCase()); /* || nombreCompletoEspecialista.toLowerCase().includes(filtroNombre.toLowerCase()); */
           })
           .map((item) => (
             <TableRow key={item.id}>
@@ -171,6 +183,10 @@ export default function Citas() {
               <TableCell>{item.fecha}</TableCell>
               <TableCell>{item.hora_inicio}</TableCell>
               <TableCell>{item.hora_termino}</TableCell>
+              <TableCell>
+              {item.especialista.nombre} {item.especialista.apellido_paterno}{" "}
+              {item.especialista.apellido_materno}
+              </TableCell>
               <TableCell>{item.procedimiento}</TableCell>
               <TableCell>{item.costo}</TableCell>
               <TableCell>
@@ -196,6 +212,7 @@ export default function Citas() {
         nuevosDatos={nuevosDatos}
         setNuevosDatos={setNuevosDatos}
         pacientes={pacientes}
+        especialistas={especialistas}
       />
 
       {/* Modal de error */}

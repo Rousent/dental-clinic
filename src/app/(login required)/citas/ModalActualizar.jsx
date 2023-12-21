@@ -1,7 +1,7 @@
 // ModalActualizar.jsx
 import { Modal, ModalContent, ModalHeader, ModalFooter, Button, ModalBody } from "@nextui-org/react";
 
-const ModalActualizar = ({ isOpen, onClose, handleActualizar, nuevosDatos, setNuevosDatos, pacientes }) => {
+const ModalActualizar = ({ isOpen, onClose, handleActualizar, nuevosDatos, setNuevosDatos, pacientes, especialistas }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalContent>
@@ -18,6 +18,20 @@ const ModalActualizar = ({ isOpen, onClose, handleActualizar, nuevosDatos, setNu
                 {pacientes.map((paciente) => (
                   <option key={paciente.id} value={paciente.id}>
                     {`${paciente.nombre} ${paciente.apellido_paterno} ${paciente.apellido_materno}`}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label>
+              Especialista:
+              <select
+                value={nuevosDatos.especialista}
+                onChange={(e) => setNuevosDatos({ ...nuevosDatos, especialista: e.target.value})}
+              >
+                <option value="">Seleccionar Especialista</option>
+                {especialistas.map((especialista) => (
+                  <option key={especialista.id} value={especialista.id}>
+                    {`${especialista.nombre} ${especialista.apellido_paterno} ${especialista.apellido_materno}`}
                   </option>
                 ))}
               </select>
