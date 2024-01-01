@@ -6,7 +6,7 @@ import {
 	IconTool,
 	IconUserCircle,
 	IconDoorExit,
-	IconHome
+	IconHome,
 } from "@tabler/icons-react";
 import {
 	Navbar,
@@ -16,7 +16,7 @@ import {
 	NavbarMenuToggle,
 	NavbarMenu,
 } from "@nextui-org/navbar";
-import Link from "next/link";
+import { Link } from "@nextui-org/react";
 import { useState } from "react";
 
 export default function Navigation({ userIsAdmin }) {
@@ -52,11 +52,7 @@ export default function Navigation({ userIsAdmin }) {
 					} else {
 						return (
 							<NavbarItem key={`${item[0]}`}>
-								<Link
-									className="w-full flex"
-									href={item[1]}
-									size="lg"
-								>
+								<Link isBlock color="foreground" href={item[1]}>
 									{item[2]} {item[0]}
 								</Link>
 							</NavbarItem>
@@ -72,11 +68,7 @@ export default function Navigation({ userIsAdmin }) {
 					} else {
 						return (
 							<NavbarItem key={`${item[0]}`}>
-								<Link
-									className="w-full flex"
-									href={item[1]}
-									size="lg"
-								>
+								<Link isBlock color="foreground" href={item[1]}>
 									{item[2]} {item[0]}
 								</Link>
 							</NavbarItem>
