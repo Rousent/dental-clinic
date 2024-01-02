@@ -9,6 +9,7 @@ import { ObtenerDatosCita } from "./citas/ObtenerDatosCita";
 import { ObtenerDatosPaciente } from "./pacientes/ObtenerDatosPaciente";
 import { ObtenerDatosEspecialista } from "./citas/crearCitaExistente/ObtenerDatosEspecialista";
 import { useState } from "react";
+import Link from "next/link";
 import {
 	Modal,
 	ModalContent,
@@ -59,6 +60,12 @@ export default function Home() {
 			<h1 className="flex items-center justify-center text-3xl font-bold mt-10 mb-5">
 				Calendario de Citas
 			</h1>
+
+			<div className="mt-auto text-center mb-5">
+				<Link href="citas/crearCitaExistente/">
+					<Button color="primary">Crear Cita</Button>
+				</Link>
+			</div>
 
 			<FullCalendar
 				events={async (info, successCallback, failureCallback) => {

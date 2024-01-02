@@ -7,6 +7,9 @@ const roboto = Roboto({ weight: ["400", "700"], subsets: ["latin"] });
 export const metadata = {
 	title: "Dental Clinic",
 	description: "Clinica Dental",
+	icons: {
+		icon: "/icon.png",
+	},
 };
 
 export default function RootLayout({ children }) {
