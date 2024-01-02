@@ -5,7 +5,7 @@ import { supabase } from "../Supabase";
 const eliminarCita = async (citaId) => {
   try {
     const { data, error } = await supabase
-      .from('citas_duplicate') // Reemplaza 'nombre_de_tu_tabla' con el nombre real de tu tabla
+      .from('citas') // Reemplaza 'nombre_de_tu_tabla' con el nombre real de tu tabla
       .delete()
       .eq('id', citaId);
 

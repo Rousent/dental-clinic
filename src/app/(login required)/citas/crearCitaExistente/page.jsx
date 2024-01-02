@@ -61,25 +61,26 @@ export default function crearCitaExistente() {
     setIsConfirmationModalOpen(true);
   };
 
-  const handleConfirmSubmit = async () => {
-    // Cerrar el modal de confirmación
+  const requiredFields = ["fecha", "hora_inicio", "hora_termino", "procedimiento", "costo", "especialista", "paciente"];
+
+const validateData = (data) => {
+  for (let field of requiredFields) {
+    if (!data[field]) {
+      return false;
+    }
+  }
+  return true;
+};
+
+const handleConfirmSubmit = async () => {
+  try {
     setIsConfirmationModalOpen(false);
 
-    // Validar que los campos requeridos estén llenos
-    if (
-      !data.fecha ||
-      !data.hora_inicio ||
-      !data.hora_termino ||
-      !data.procedimiento ||
-      !data.costo ||
-      !data.especialista ||
-      !data.paciente
-    ) {
+    if (!validateData(data)) {
       setIsErrorModalOpen(true);
       return;
     }
 
-    // Realiza el registro en la tabla de Supabase
     const { data: insertedData, error } = await supabase
       .from("citas")
       .insert([data]);
@@ -91,7 +92,11 @@ export default function crearCitaExistente() {
       console.log("Registro exitoso:", insertedData);
       setIsSuccessModalOpen(true);
     }
-  };
+  } catch (error) {
+    console.error("An error occurred:", error);
+    setIsErrorModalOpen(true);
+  }
+};
 
   const handleCloseSuccessModal = () => {
     setIsSuccessModalOpen(false);

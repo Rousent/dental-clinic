@@ -1,18 +1,16 @@
-'use client'
+"use client";
 import { useState } from "react";
 import { Button } from "@nextui-org/react";
 import SuccessModal from "./SuccessModal";
 import ErrorModal from "./ErrorModal";
 import ConfirmationModal from "./ConfirmationModal";
-import { supabase } from "../../Supabase"
+import { supabase } from "../../Supabase";
 import Link from "next/link";
 
 export default function Pruebas() {
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
-
-  
 
   const [data, setData] = useState({
     nombre: "",
@@ -42,7 +40,7 @@ export default function Pruebas() {
     if (!data.nombre || !data.apellido_paterno || !data.apellido_materno) {
       console.error("Error al insertar datos: campos requeridos vacíos");
       setIsErrorModalOpen(true);
-      
+
       return;
     }
 
@@ -55,7 +53,6 @@ export default function Pruebas() {
       console.error("Error al insertar datos:", error.message);
       console.log("Registro fallido:", data);
       setIsErrorModalOpen(true);
-      
     } else {
       console.log("Registro exitoso:", insertedData);
       setIsSuccessModalOpen(true);
@@ -91,10 +88,13 @@ export default function Pruebas() {
             </div>
           </div>
 
-          <form onSubmit={(e) => { e.preventDefault(); handleConfirmation(); }}>
-           
-           
-          <div className="mb-4">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleConfirmation();
+            }}
+          >
+            <div className="mb-4">
               <label className="block text-sm text-gray-600">Nombre*:</label>
               <input
                 type="text"
@@ -102,6 +102,8 @@ export default function Pruebas() {
                 placeholder="Nombre"
                 name="nombre"
                 onChange={handleChange}
+                pattern="\w+"
+                title="El nombre solo puede contener letras y guiones bajos."
                 required
               />
             </div>
@@ -116,6 +118,8 @@ export default function Pruebas() {
                 placeholder="Apellido paterno"
                 name="apellido_paterno"
                 onChange={handleChange}
+                pattern="\w+"
+                title="El apellido paterno solo puede contener letras y guiones bajos."
                 required
               />
             </div>
@@ -130,6 +134,8 @@ export default function Pruebas() {
                 placeholder="Apellido materno"
                 name="apellido_materno"
                 onChange={handleChange}
+                pattern="\w+"
+                title="El apellido materno solo puede contener letras y guiones bajos."
                 required
               />
             </div>
@@ -137,27 +143,35 @@ export default function Pruebas() {
             <div className="mb-4">
               <label className="block text-sm text-gray-600">Telefono:</label>
               <input
-                type="number"
+                type="text"
                 className="w-full border border-black rounded-md px-3 py-2"
                 placeholder="ejem. 921 118 7752"
                 name="telefono"
                 onChange={handleChange}
+                pattern="\d{10}"
+                title="Por favor, introduzca exactamente 10 dígitos."
+                required
               />
             </div>
 
             <div className="mb-4">
               <label className="block text-sm text-gray-600">Email:</label>
               <input
-                type="email"
+                type="text"
                 className="w-full border border-black rounded-md px-3 py-2"
                 placeholder="ejemplo@gmail.com"
                 name="email"
                 onChange={handleChange}
+                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                title="Por favor, introduzca un correo electrónico válido."
+                required
               />
             </div>
-            
+
             <div className="mt-auto text-center">
-              <Button type="submit" color="primary">Enviar</Button>
+              <Button type="submit" color="primary">
+                Enviar
+              </Button>
             </div>
           </form>
         </div>
@@ -170,10 +184,7 @@ export default function Pruebas() {
       />
 
       {/* Modal de error */}
-      <ErrorModal
-        isOpen={isErrorModalOpen}
-        onClose={handleCloseErrorModal}
-      />
+      <ErrorModal isOpen={isErrorModalOpen} onClose={handleCloseErrorModal} />
 
       {/* Modal de confirmación */}
       <ConfirmationModal
