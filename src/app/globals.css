@@ -3,13 +3,23 @@
 @tailwind utilities;
 
 :root {
-  @apply w-full h-full;
+	@apply w-full h-full;
 }
 
 body {
-  @apply w-full h-full;
+	@apply w-full h-full;
 }
 
 div[data-overlay-container="true"] {
-  height: inherit;
+	height: inherit;
+}
+
+.fondo-gradiente {
+	background: rgb(121, 181, 219);
+	background: radial-gradient(
+		circle,
+		rgba(121, 181, 219, 1) 0%,
+		rgba(52, 144, 202, 1) 30%,
+		rgba(21, 46, 85, 1) 100%
+	);
 }

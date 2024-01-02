@@ -23,7 +23,7 @@ export default async function NavigationLayout({ children }) {
 	return (
 		<>
 			<Navigation userIsAdmin={userIsAdmin} />
-			<div className="max-w-[1024px] mx-auto px-10">{children}</div>
+			<div className="max-w-[1436px] mx-auto px-10">{children}</div>
 		</>
 	);
 }

@@ -50,7 +50,7 @@ export default function EditEspecialidad({
 
 	return (
 		<>
-			<Button color="success" onPress={onOpen}>
+			<Button color="primary" onPress={onOpen}>
 				Modificar
 			</Button>
 			<Modal isOpen={isOpen} onOpenChange={onOpenChange}>
@@ -79,13 +79,13 @@ export default function EditEspecialidad({
 							</ModalBody>
 							<ModalFooter>
 								<Button
-									color="success"
+									color="danger"
 									variant="light"
 									onPress={onClose}
 								>
 									Cancelar
 								</Button>
-								<Button type="submit" color="success">
+								<Button type="submit" color="primary">
 									Guardar Cambios
 								</Button>
 							</ModalFooter>
