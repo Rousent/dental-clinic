@@ -45,7 +45,7 @@ export default function ChangePassword() {
 
 	return (
 		<>
-			<Button onPress={onOpen} color="secondary" variant="light">
+			<Button onPress={onOpen} color="primary" variant="light">
 				Cambiar Contraseña
 			</Button>
 			<Modal isOpen={isOpen} onOpenChange={onOpenChange}>
@@ -112,7 +112,7 @@ export default function ChangePassword() {
 								>
 									Cancelar
 								</Button>
-								<Button color="secondary" type="submit">
+								<Button color="primary" type="submit">
 									Confirmar
 								</Button>
 							</ModalFooter>

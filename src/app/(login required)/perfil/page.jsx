@@ -18,27 +18,30 @@ export default async function Perfil() {
 	perfil = perfil.data;
 
 	return (
-		<Card className="mt-5">
-			<CardHeader>
-				<h2 className="text-xl font-bold">Perfil</h2>
-			</CardHeader>
-			<Divider />
-			<CardBody>
-				<p>
-					<b>Nombre:</b> {perfil[0].nombre}{" "}
-					{perfil[0].apellido_paterno} {perfil[0].apellido_materno}
-				</p>
-				<p>
-					<b>Email:</b> {user.email}
-				</p>
-				<p>
-					<b>Especialidad:</b> {perfil[0].especialidades.nombre}
-				</p>
-			</CardBody>
-			<Divider />
-			<CardFooter className="flex justify-end">
-				<ChangePassword />
-			</CardFooter>
-		</Card>
+		<div className="flex justify-center">
+			<Card className="mt-5 w-[500px]">
+				<CardHeader>
+					<h2 className="text-xl font-bold">Perfil</h2>
+				</CardHeader>
+				<Divider />
+				<CardBody>
+					<p>
+						<b>Nombre:</b> {perfil[0].nombre}{" "}
+						{perfil[0].apellido_paterno}{" "}
+						{perfil[0].apellido_materno}
+					</p>
+					<p>
+						<b>Email:</b> {user.email}
+					</p>
+					<p>
+						<b>Especialidad:</b> {perfil[0].especialidades.nombre}
+					</p>
+				</CardBody>
+				<Divider />
+				<CardFooter className="flex justify-end">
+					<ChangePassword />
+				</CardFooter>
+			</Card>
+		</div>
 	);
 }

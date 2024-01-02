@@ -1,6 +1,5 @@
 "use client";
-import Link from "next/link";
-import { Button, ButtonGroup } from "@nextui-org/button";
+import { Button } from "@nextui-org/button";
 import {
 	Table,
 	TableHeader,
@@ -9,15 +8,7 @@ import {
 	TableRow,
 	TableCell,
 } from "@nextui-org/table";
-import {
-	Modal,
-	ModalContent,
-	ModalHeader,
-	ModalBody,
-	ModalFooter,
-} from "@nextui-org/modal";
-import { Tabs, Tab, Card, CardBody } from "@nextui-org/react";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { Tabs, Tab } from "@nextui-org/react";
 import { createClient } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
 import DeleteUser from "./deleteUsuario";
@@ -27,6 +18,7 @@ import CreateUser from "./createUsuario";
 import CreateEspecialidad from "./createEspecialidad";
 import EditEspecialidad from "./editEspecialidad";
 import BajaUsuario from "./bajaUsuario";
+import { Tooltip } from "@nextui-org/tooltip";
 
 export default function Admin() {
 	const supabase = createClient(
@@ -111,7 +103,7 @@ export default function Admin() {
 								<TableColumn>Estado</TableColumn>
 								<TableColumn>Acciones</TableColumn>
 							</TableHeader>
-							<TableBody>
+							<TableBody emptyContent="No hay usuarios">
 								{usuarios.map((user) => (
 									<TableRow key={"user" + user.id}>
 										<TableCell>
@@ -133,14 +125,22 @@ export default function Admin() {
 													}
 													supabase={supabase}
 												/>
-												<Button
-													color="warning"
-													onPress={() =>
-														sendEmail(user.email)
-													}
+												<Tooltip
+													showArrow
+													closeDelay={0}
+													content="Enviar enlace de Inicio de Sesión de un solo uso al Email del usuario."
 												>
-													Enviar Invitación
-												</Button>
+													<Button
+														color="warning"
+														onPress={() =>
+															sendEmail(
+																user.email
+															)
+														}
+													>
+														Enviar Invitación
+													</Button>
+												</Tooltip>
 												<BajaUsuario
 													usuario={user}
 													supabase={supabase}

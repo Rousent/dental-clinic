@@ -57,7 +57,7 @@ export default function Home() {
 	return (
 		<>
 			<h1 className="flex items-center justify-center text-3xl font-bold mt-10 mb-5">
-				Calendario de citas
+				Calendario de Citas
 			</h1>
 
 			<FullCalendar
