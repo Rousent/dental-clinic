@@ -2,7 +2,8 @@
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Button, ButtonGroup } from "@nextui-org/button";
+import { Button } from "@nextui-org/button";
+import Image from "next/image";
 
 export default function Login() {
 	const supabase = createClientComponentClient();
@@ -28,28 +29,29 @@ export default function Login() {
 	};
 
 	const retriveSession = async () => {
-		// Obtener el fragmento de la URL
 		var fragmento = window.location.hash.substring(1);
 
-		// Dividir los parámetros en un objeto
 		var parametros = {};
 		fragmento.split("&").forEach(function (param) {
 			var partes = param.split("=");
 			parametros[partes[0]] = partes[1];
 		});
 
-		// Acceder a los valores de los parámetros
 		const access_token = parametros.access_token;
 		const refresh_token = parametros.refresh_token;
-		// ... y así sucesivamente
+		const type = parametros.type;
 
-		const { error } = await supabase.auth.setSession({
-			access_token,
-			refresh_token,
-		});
-		alert(error.message);
-		if (!session) {
-			alert("No hay sesión");
+		if (type === "magiclink" || type === "recovery") {
+			const {
+				data: { session },
+				error,
+			} = await supabase.auth.setSession({
+				access_token,
+				refresh_token,
+			});
+			if (error) alert(error.message);
+		} else {
+			router.push("/login");
 		}
 	};
 
@@ -61,12 +63,19 @@ export default function Login() {
 		<div className="w-fit h-fit">
 			<div className="flex items-center justify-center">
 				<div className="bg-white shadow-md rounded-md p-6 w-96 mt-7 mb-7">
-					<h2 className="text-center text-xl font-semibold mb-4">
-						Dental Clinic
+					<Image
+						src="/logo.png"
+						width="578"
+						height="236"
+						alt="Logo"
+					></Image>
+
+					<h2 className="text-2xl font-bold mb-4 w-full text-center">
+						Crear Contraseña
 					</h2>
 
 					<form onSubmit={handleSubmit}>
-						<div className="mb-4">
+						<div className="my-4">
 							<label
 								htmlFor="email"
 								className="block text-sm text-gray-600"
@@ -106,7 +115,7 @@ export default function Login() {
 
 						<div className="mt-auto text-center">
 							<Button color="primary" type="submit">
-								Iniciar Sesión
+								Guardar
 							</Button>
 						</div>
 					</form>

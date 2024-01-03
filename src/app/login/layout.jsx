@@ -10,7 +10,7 @@ export default async function Layout({ children }) {
 	if (session) redirect("/");
 
 	return (
-		<div className="flex h-full justify-center items-center">
+		<div className="flex h-full justify-center items-center fondo-gradiente">
 			{children}
 		</div>
 	);

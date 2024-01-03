@@ -6,7 +6,6 @@ import {
 	IconTool,
 	IconUserCircle,
 	IconDoorExit,
-	IconHome
 } from "@tabler/icons-react";
 import {
 	Navbar,
@@ -16,14 +15,14 @@ import {
 	NavbarMenuToggle,
 	NavbarMenu,
 } from "@nextui-org/navbar";
-import Link from "next/link";
+import { Link } from "@nextui-org/react";
 import { useState } from "react";
+import Image from "next/image";
 
 export default function Navigation({ userIsAdmin }) {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 
 	const links = [
-		["Home", "/", <IconHome className="mr-2" />],
 		["Citas", "/citas", <IconCalendarUser className="mr-2" />],
 		["Pacientes", "/pacientes", <IconAddressBook className="mr-2" />],
 		["Admin", "/admin", <IconTool className="mr-2" />],
@@ -32,31 +31,27 @@ export default function Navigation({ userIsAdmin }) {
 	];
 
 	return (
-		<Navbar onMenuOpenChange={setIsMenuOpen}>
-			<NavbarContent>
+		<Navbar onMenuOpenChange={setIsMenuOpen} className="h-[110px]">
+			<NavbarContent className="h-[110px]">
 				<NavbarMenuToggle
 					aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-					className="md:hidden"
+					className="lg:hidden"
 				/>
-				<NavbarBrand>
-					<span className="text-2xl font-bold text-inherit">
-						Dental Clinic
-					</span>
+				<NavbarBrand className="w-full h-full">
+					<Link href="/" className="w-full h-full">
+						<Image src="/logo.png" alt="Logo" fill></Image>
+					</Link>
 				</NavbarBrand>
 			</NavbarContent>
 
-			<NavbarContent className="hidden md:flex gap-10" justify="center">
+			<NavbarContent className="hidden lg:flex gap-10" justify="center">
 				{links.map((item) => {
 					if (item[0] === "Admin" && !userIsAdmin) {
 						return null;
 					} else {
 						return (
 							<NavbarItem key={`${item[0]}`}>
-								<Link
-									className="w-full flex"
-									href={item[1]}
-									size="lg"
-								>
+								<Link isBlock color="primary" href={item[1]}>
 									{item[2]} {item[0]}
 								</Link>
 							</NavbarItem>
@@ -72,11 +67,7 @@ export default function Navigation({ userIsAdmin }) {
 					} else {
 						return (
 							<NavbarItem key={`${item[0]}`}>
-								<Link
-									className="w-full flex"
-									href={item[1]}
-									size="lg"
-								>
+								<Link isBlock color="foreground" href={item[1]}>
 									{item[2]} {item[0]}
 								</Link>
 							</NavbarItem>

@@ -42,8 +42,6 @@ export default function CreateUser({ especialidades, supabase }) {
 				email,
 			});
 
-			alert(data);
-
 			const { error } = await supabase.rpc("crear_perfil", {
 				_nombre: nombre,
 				_apellido_paterno: paterno,
