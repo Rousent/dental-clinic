@@ -37,9 +37,14 @@ export default function Navigation({ userIsAdmin }) {
 					aria-label={isMenuOpen ? "Close menu" : "Open menu"}
 					className="lg:hidden"
 				/>
-				<NavbarBrand className="w-full h-full">
-					<Link href="/" className="w-full h-full">
-						<Image src="/logo.png" alt="Logo" fill></Image>
+				<NavbarBrand className="w-fit h-fit">
+					<Link href="/" className="w-fit h-fit">
+						<Image
+							src="/logo.png"
+							alt="Logo"
+							width={289}
+							height={118}
+						></Image>
 					</Link>
 				</NavbarBrand>
 			</NavbarContent>
@@ -60,7 +65,7 @@ export default function Navigation({ userIsAdmin }) {
 				})}
 			</NavbarContent>
 
-			<NavbarMenu>
+			<NavbarMenu className="mt-12">
 				{links.map((item) => {
 					if (item[0] === "Admin" && !userIsAdmin) {
 						return null;
