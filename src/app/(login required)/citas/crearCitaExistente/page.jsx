@@ -9,7 +9,7 @@ import ErrorModal from "./ErrorModal";
 import ConfirmationModal from "./ConfirmationModal";
 import { supabase } from "../../Supabase";
 
-export default function crearCitaExistente() {
+export default function CrearCitaExistente() {
 	const [datos, setDatos] = useState([]);
 	const [datosEspecialista, setDatosEspecialista] = useState([]);
 
